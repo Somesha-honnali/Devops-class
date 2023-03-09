@@ -1,0 +1,346 @@
+
+# Show's the current git version
+git --version
+
+
+# List global configuration for the current user
+git config --global --list
+
+
+# Set the name and email to the git global configuration
+git config --global user.email "you@example.com"
+git config --global user.name "Your Name"
+
+
+
+# Create the index.html file and insert the Hello World text to the html file
+echo "Hello World" > index.html
+
+
+# Check the status of the index.html file. Returns an error saying a not a git repository
+git status
+
+# Create an empty Git repository
+git init
+
+# Check the status of the index.html file. index.html will be a untracked file
+git status
+
+# Add the file to the staging area
+git add index.html
+
+# Check status again. index.html will be in the "Changes to be committed section"
+git status
+
+# Remove the file from the staging area to the working directory
+git rm --cached index.html
+
+# Verify by checking git status
+git status
+
+# Adds all the files in working directory to the staging area
+git add .
+
+# Check status again to verify the last command
+git status
+
+
+# List all your commits. As of now, it will be empty
+git log
+
+# Moves all your changes in staging area to the local repository
+git commit -m "Initial Commit"
+
+# Your last commit should be listed here
+git log
+
+---
+
+Git Stash 
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ vi index.html
+
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+my third line
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+my third line
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git stash
+warning: in the working copy of 'index.html', LF will be replaced by CRLF the next time Git touches it
+Saved working directory and index state WIP on master: 767d14c  this is my second commit
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git stash list
+stash@{0}: WIP on master: 767d14c this is my second commit
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git stash pop
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (a7c4006ff64269d68d1ccd4907320928d204ff0c)
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+my third line
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git add .
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git status
+On branch master
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   index.html
+
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git commit -m " 3rd comit "
+[master 131e6c6]  3rd comit
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+---------------------------------------------
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+my third line
+
+my 4th line
+
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git log
+commit 6cf67a05a0b6a8c858c99323052aa9135e0141f7 (HEAD -> master)
+Author: pradeep <myemail.gmail.com>
+Date:   Mon Oct 10 08:50:04 2022 +0530
+
+     4th comit
+
+commit 131e6c60b9fdce0cc375c053a4ac606a8ad4ddc6
+Author: pradeep <myemail.gmail.com>
+Date:   Fri Oct 7 09:13:30 2022 +0530
+
+     3rd comit
+
+commit 767d14c2a83ca5fe55dbafb14f973b8bb41115b3
+Author: pradeep <myemail.gmail.com>
+Date:   Fri Oct 7 08:59:28 2022 +0530
+
+     this is my second commit
+
+commit f263a0157568085c3ada9487e30905567240daaa
+Author: pradeep <myemail.gmail.com>
+Date:   Fri Oct 7 08:57:33 2022 +0530
+
+    Initial Commit
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git log --oneline
+6cf67a0 (HEAD -> master)  4th comit
+131e6c6  3rd comit
+767d14c  this is my second commit
+f263a01 Initial Commit
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git revert 6cf67a0
+[master 32481c6] Revert " 4th comit"
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git status
+On branch master
+nothing to commit, working tree clean
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+my third line
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git log --oneline
+32481c6 (HEAD -> master) Revert " 4th comit"
+6cf67a0  4th comit
+131e6c6  3rd comit
+767d14c  this is my second commit
+f263a01 Initial Commit
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+git
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git revert 32481c6
+hint: Waiting for your editor to close the file...
+[master b736938] Revert "Revert " 4th comit""
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+ca
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+my third line
+
+my 4th line
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git log --oneline
+b736938 (HEAD -> master) Revert "Revert " 4th comit""
+32481c6 Revert " 4th comit"
+6cf67a0  4th comit
+131e6c6  3rd comit
+767d14c  this is my second commit
+f263a01 Initial Commit
+
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git reset 767d14c
+Unstaged changes after reset:
+M       index.html
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+my third line
+
+my 4th line
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git status
+On branch master
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   index.html
+
+no changes added to commit (use "git add" and/or "git commit -a")
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git log --online
+fatal: unrecognized argument: --online
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git log --oneline
+767d14c (HEAD -> master)  this is my second commit
+f263a01 Initial Commit
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+my third line
+
+my 4th line
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ git stash
+Saved working directory and index state WIP on master: 767d14c  this is my second commit
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)
+$ cat index.html
+Hello World
+
+second line
+
+pradeep.281828@BLREQX163498L MINGW32 ~/Desktop/git (master)

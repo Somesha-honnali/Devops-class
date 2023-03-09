@@ -1,0 +1,38 @@
+Advantages of Ansible
+Although there are various advantages of using Ansible in your infra but below are few and important advantages.
+
+Agentless
+No need to install nodes on remote servers
+Totally rely on SSH
+Various big organisations uses Ansible such as  Apple, NASA, Juniper etc.
+
+1. Install Ansible using EPEL Repository
+Download epel repository on the amazon linux 2 instance as follows,
+
+$ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+Next, Install epel repository using yum.
+
+$ sudo yum install epel-release-latest-7.noarch.rpm
+Update epel repository as follows,
+
+$ sudo yum update -y
+Now install all individual packages inside the repository along with ansible.
+
+$ sudo yum install python python-devel python-pip openssl ansible -y
+2. Install Ansible using amazon-linux-extras Repository
+Ansible package can be installed on amazon linux using amazon provided packages.
+
+$ sudo amazon-linux-extras install ansible2
+Check Ansible version
+To verify whether Ansible is installed on your machine, you can verify it as follows,
+
+$ ansible --version
+
+ansible 2.9.13
+config file = /etc/ansible/ansible.cfg
+configured module search path = [u'/root/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+ansible python module location = /usr/lib/python2.7/site-packages/ansible
+executable location = /bin/ansible
+python version = 2.7.18 (default, Aug 27 2020, 21:22:52) [GCC 7.3.1 20180712 (Red Hat 7.3.1-9)]
+Configure Ansible on Amazon Linux-2
+Firstly, create new users on master & client machines.

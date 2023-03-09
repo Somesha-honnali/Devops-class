@@ -1,0 +1,118 @@
+Last login: Mon Nov 14 16:45:55 2022 from 27.4.206.199
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+31 package(s) needed for security, out of 49 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@master ~]$ 
+[ec2-user@master ~]$ 
+[ec2-user@master ~]$ 
+[ec2-user@master ~]$ 
+[ec2-user@master ~]$ history
+    1  clear
+    2  clear
+    3  sudo -i
+    4  exit
+    5  sudo -i\
+    6  sudo -i
+    7  clear
+    8  su ansadmin
+    9  sudo -i
+   10  ls
+   11  ]sudo -user
+   12  ]sudo -i
+   13  su -i
+   14  su /
+   15  su root
+   16  su -i
+   17  ip a
+   18  ip a | grep 192
+   19  sudo -i
+   20  exi
+   21  exit
+   22  hello world
+   23  Ansible linux -m shell -a “ free -m” 
+   24  ansible linux -m shell -a “ free -m” 
+   25  su ansadmin
+   26  sudo -i
+   27  ls
+   28  sudo -i
+   29  history
+[ec2-user@master ~]$ 
+
+ANSIBLE MASTER IN ROOT
+Last login: Sun Dec 18 04:41:04 2022 from ec2-18-206-107-29.compute-1.amazonaws.com
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+31 package(s) needed for security, out of 49 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@master ~]$ 
+[ec2-user@master ~]$ 
+[ec2-user@master ~]$ 
+[ec2-user@master ~]$ sudo -i
+[root@master ~]# history
+    1  hostnamectl set-hostname master
+    2  bash
+    3  $ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    4   wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+    5   sudo yum install epel-release-latest-7.noarch.rpm
+    6  sudo yum update -y
+    7  sudo yum install python python-devel python-pip openssl ansible -y
+    8  sudo amazon-linux-extras install ansible2
+    9  ansible --version
+   10  clear
+   11  rpm -qa  | grep ansible
+   12  sudo useradd ansadmin
+   13  passwd ansadmin 
+   14  su ansadmin
+   15  sudo visudo
+   16  su ansadmin
+   17   sudo vi /etc/ssh/sshd_config
+   18  sudo service sshd restart
+   19  ssh-keygen
+   20  su asnadmin
+   21  su ansadmin
+   22  vi /etc/ansible/hosts
+   23  ansible -m ping ec2-servers
+   24  ansible -m ping ec2
+   25  ansible 192.168.0.59  -m ping
+   26  ansible 192.168.0.59 -m ping
+   27  su ansadmin 
+   28  vi /etc/ansible/hosts
+   29  su ansadmin
+   30  exit
+   31  clear
+   32  ansible servers -m copy -a "src=/tmp/myfile.txt dest=/tmp"
+   33  pwd
+   34  vi 1.txt
+   35  ansible servers -m copy -a "src=1.txt dest=/tmp"
+   36  $ sudo  vi /etc/ansible/hosts
+   37   sudo  vi /etc/ansible/hosts
+   38  ansible servers -m copy -a "src=1.txt dest=/tmp"
+   39  ip r
+   40  clear
+   41  ansible servers -m copy -a "src=1.txt dest=/tmp"
+   42   sudo  vi /etc/ansible/hosts
+   43  pwd
+   44  ansible servers -m copy -a "src=root/1.txt dest=/tmp"
+   45  ansible servers -m copy -a "src=/root/1.txt dest=/tmp"
+   46   sudo  vi /etc/ansible/hosts
+   47  ansible servers -m copy -a "src=/root/1.txt dest=/tmp"
+   48  pwd
+   49  ls
+   50  su ansadmin
+   51  clear
+   52  exit
+   53  exit
+   54  su ansadmin
+   55  clear
+   56  vi /home/ansadmin/myplay.yaml
+   57  history
+[root@master ~]# 

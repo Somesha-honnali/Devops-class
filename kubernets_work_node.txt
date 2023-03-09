@@ -1,0 +1,96 @@
+    2  sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+    3  reboot
+    4  sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+    5  clear
+    6  systemctl stop firewalld
+    7  systemctl disable firewalld
+    8  sudo yum update -y
+    9   sudo amazon-linux-extras install docker -y
+   10   systemctl enable docker
+   11   systemctl daemon-reload && systemctl restart docker 
+   12   sudo usermod -a -G docker ec2-user
+   13   docker info
+   14   swapoff -a
+   15  echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+   16  modprobe br_netfilter
+   17  modprobe nf_nat
+   18  modprobe xt_REDIRECT
+   19  modprobe xt_owner
+   20  modprobe iptable_nat
+   21  modprobe iptable_mangle
+   22  modprobe iptable_filter
+   23  cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+   24  [kubernetes]
+   25  name=Kubernetes
+   26  baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+   27  enabled=1
+   28  gpgcheck=1
+   29  repo_gpgcheck=1
+   30  gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+   31  EOF
+   32  yum install -y kubelet-1.21.2
+   33  yum install -y kubectl-1.21.2
+   34  yum install -y kubeadm-1.21.2
+   35  systemctl daemon-reload 
+   36  systemctl restart kubelet
+   37   
+   38  systemctl  status kubelet
+   39  systemctl enable  kubelet
+   40  claer
+   41  clear
+   42  mv /etc/yum.repos.d/kubernetes.repo /etc/yum.repos.d/kubernetes.repo.bak
+   43  cat >> /etc/yum.repos.d/kubernetes.repo <<EOF
+   44  [kubernetes]
+   45  name=Kubernetes
+   46  baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+   47  enabled=1
+   48  gpgcheck=0
+   49  EOF
+   50  yum install -y kubelet-1.21.2
+   51  yum install -y kubectl-1.21.2
+   52  yum install -y kubeadm-1.21.2
+   53  systemctl daemon-reload 
+   54  systemctl restart kubelet
+   55   
+   56  systemctl  status kubelet
+   57  systemctl enable  kubelet
+   58  swapoff -a
+   59  clear
+   60  hostname work_mode
+   61  Hostnamectl set-hostname Work_mode
+   62  $ sudo hostnamectl set-hostname WORKMOD
+   63   hostnamectl set-hostname WORKMOD
+   64  sudo hostnamectl set-hostname WORKMOD
+   65   vi /etc/hosts
+   66  # /etc/init.d/hostname restart
+   67  # vi /etc/sysconfig/network
+   68   hostnamectl set-hostname WORK_MOD
+   69  HOSTNAME=WORK_MOD
+   70  reboot
+   71  clear
+   72  ip r
+   73  HOSTNAME=WORK
+   74   hostnamectl set-hostname WORK
+   75  HOSTNAME=WORK
+   76  REBOOT
+   77  reboot
+   78  clear
+   79  kubeadm reset 
+   80  kubeadm join 192.168.10.30:6443 --token 74icky.dow9oqgrsnqndf1k --discovery-token-ca-cert-hash sha256:dc85a056258eb2e76a5a36a0ca78e83db99e92cfe049b2161c2218f75ab58b42 
+   81  cat /etc/hosts
+   82  vi /etc/hosts
+   83  hostanem -i
+   84  hostame  -i
+   85  hostname
+   86  hostname -i 
+   87  vi /etc/hosts
+   88  kubeadm reset -y 
+   89  kubeadm reset
+   90  kubeadm join 192.168.10.30:6443 --token 74icky.dow9oqgrsnqndf1k --discovery-token-ca-cert-hash sha256:dc85a056258eb2e76a5a36a0ca78e83db99e92cfe049b2161c2218f75ab58b42 
+   91  clear
+   92  kubeadm reset 
+   93  kubeadm join 192.168.10.30:6443 --token 74icky.dow9oqgrsnqndf1k --discovery-token-ca-cert-hash sha256:dc85a056258eb2e76a5a36a0ca78e83db99e92cfe049b2161c2218f75ab58b42 
+   94  clear
+   95  kubeadm reset 
+   96  kubeadm join 192.168.10.30:6443 --token 74icky.dow9oqgrsnqndf1k --discovery-token-ca-cert-hash sha256:dc85a056258eb2e76a5a36a0ca78e83db99e92cfe049b2161c2218f75ab58b42 
+   97  history

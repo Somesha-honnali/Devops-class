@@ -1,0 +1,358 @@
+Docker -
+
+https://docs.docker.com/engine/install/centos/
+ 
+ sudo amazon-linux-extras install docker -y
+ systemctl enable  docker 
+ systemctl daemon-reload && systemctl restart docker 
+ sudo usermod -a -G docker ec2-user
+ docker info
+ 
+ https://hub.com/docker
+ 
+ Instatll docker in ubuntu 
+
+ 
+ -----
+ 
+ # Ensure docker is started and enabled as a service
+sudo systemctl start docker
+sudo systemctl enable docker
+
+# Check docker version
+docker --version
+
+
+# View details of docker installation
+docker info
+
+# List docker images
+docker image ls
+
+# List docker containers
+docker container ls
+
+# Run a container from an image
+docker run hello-world
+
+# List docker containers
+docker container ls
+
+# Can't find container? List all docker containers (including stopped)
+docker container ls -a
+
+# List all docker container IDs
+docker container ls -aq
+
+# List docker images
+docker image ls
+
+# Pull a docker image and rerun image list command
+docker pull ubuntu
+
+# List docker images
+docker image ls
+
+# Run a ubuntu container (Image pulled automatically)
+docker run -it --name ubuntu ubuntu
+# Install apache server
+>   apt-get update
+>   apt-get install -y apache2 curl net-tools
+>   service apache2 status
+>   echo 'Hello World' > /var/www/html/index.html
+>   service apache2 start
+>   netstat -plnt
+>   curl localhost
+>   ifconfig
+>   curl 172.17.0.2
+>   exit
+
+
+ 
+# From docker host, curl containers IP
+curl 172.17.0.2
+
+# Can't connect? Check container status.
+docker container ls -a
+
+# Start the container
+docker container start ubuntu
+
+# Check container's status again
+docker container ls -a
+
+# curl containers IP again
+curl 172.17.0.2
+
+# Is IP changed? check by inspecting the container
+docker inspect ubuntu
+
+# Too much info.? Filter your outputs
+docker inspect ubuntu -f '{{.NetworkSettings.IPAddress}}'
+docker inspect ubuntu -f '{{json .NetworkSettings.Networks}}'
+
+# Attach to container and check if apache is running. If not, start it.
+docker attach ubuntu
+  service apache2 status
+  service apache2 start
+# If exited now, the container will be stopped and even if started back, apache process won't auto-start
+# Instead of exit, just detach the container
+PRESS Ctrl-P and Ctrl-Q one after another
+
+# Check container's status
+docker container ls -a
+
+# curl containers IP now
+curl 172.17.0.2
+
+# Let's save this container as an image and replicate further
+# Stop container
+docker container stop ubuntu
+
+# Check container's status
+docker container ls -a
+
+# Save container as a new image (Created image with entrypoint to start apache server automatically)
+docker commit -c "ENTRYPOINT apachectl -D FOREGROUND" ubuntu myapache
+
+# List docker images
+docker image ls
+
+# Launch a new container from new image in detached mode but still interactive
+docker run -itd --name apache1 myapache
+
+# Check container's status (Notice difference between old and new container's COMMAND column)
+docker container ls -a
+
+# docker run -itd --name besant myapache:latest
+
+# Get new containers IP and curl it (Apache server is running by default)
+docker inspect apache1 -f '{{.NetworkSettings.IPAddress}}'
+curl 172.17.0.2
+
+# Get you docker host's private IP and public IP
+ifconfig
+curl ifconfig.co
+
+# Check the listening ports of your docker host
+netstat -plnt
+
+# Did you realize? The container and host are in two different networks.
+# Only the host can access the container network and it can't be accessed remotely.
+# To make it publicly accessible, bind the ports of the host and the container
+# Unfortunately, it can't be done on a running container with docker
+
+# Start a new container with port binding
+docker run -itd --name apache2 -p 80:80 myapache
+
+# Check container's status (Notice difference between old and new container's PORTS column)
+docker container ls -a
+
+# Check the listening ports of your docker host
+netstat -plnt
+
+# curl the localhost of your docker host
+curl localhost
+
+# Open the public IP of your docker host in a web browser
+
+# Can same host port be bound with multiple container? Not in this world
+docker run -itd --name apache2a -p 80:80 myapache
+
+# Out of curiosity, What happens if host port is not given? Try it out!
+docker run -itd --name apache3 -p 80 myapache
+
+# Check container's status
+docker container ls -a
+
+# Random ports allocated? Let's verify it by curl
+curl localhost:RANDOM_PORT
+
+# What if I want to bind multiple ports? Not a problem at all
+docker run -itd --name apache4 -p 8080:80 -p 8081:80 myapache
+docker container ls -a
+curl localhost:8080
+curl localhost:8081
+
+# Is there anyway to check bound ports other than container status command? Yes, Of course.
+docker port apache4
+
+# Anything else in port bindings? One Last thing. (Lists host ports for a given container port)
+docker port apache4 80/tcp
+
+# Attach to your new container to check logs
+docker attach apache2
+
+# Not working? check container status
+docker container ls -a
+
+# Start the container again and use docker logs
+docker container start apache2
+docker logs apache2
+
+# Uh-oh! Only the stdout of apache server is shown. We need to enter into the container to get the access logs and There's a way.
+docker exec -it apache2 /bin/bash
+  cat /var/log/apache2/access.log
+  exit
+  
+  ----------------------------
+  
+  docker push image to hub.docker.com 
+  
+  [root@ip-192-168-10-18 ~]# docker login -u myawspk
+Password:
+WARNING! Your password will be stored unencrypted in /root/.docker/config.json.
+Configure a credential helper to remove this warning. See
+https://docs.docker.com/engine/reference/commandline/login/#credentials-store
+
+Login Succeeded
+[root@ip-192-168-10-18 ~]# docker pull ubuntu
+Using default tag: latest
+latest: Pulling from library/ubuntu
+301a8b74f71f: Pull complete
+Digest: sha256:7cfe75438fc77c9d7235ae502bf229b15ca86647ac01c844b272b56326d56184
+Status: Downloaded newer image for ubuntu:latest
+docker.io/library/ubuntu:latest
+[root@ip-192-168-10-18 ~]#
+[root@ip-192-168-10-18 ~]#
+[root@ip-192-168-10-18 ~]# docker image ls
+REPOSITORY                                             TAG       IMAGE ID       CREATED         SIZE
+ubuntu                                                 latest    cdb68b455a14   2 days ago      77.8MB
+myapache                                               latest    b159f909e646   8 days ago      224MB
+httpd                                                  latest    d16a51d08814   3 weeks ago     145MB
+ubuntu                                                 <none>    216c552ea5ba   3 weeks ago     77.8MB
+058188331574.dkr.ecr.us-east-1.amazonaws.com/pradeep   myfile    7981f152fdbd   5 weeks ago     65.5MB
+hello-world                                            latest    feb5d9fea6a5   13 months ago   13.3kB
+selva95/pyapp                                          <none>    4fac74ce1262   19 months ago   122MB
+tekfik/chrome                                          latest    3f40b28e279d   2 years ago     757MB
+username/repo                                          <none>    c7f5ee4d4030   5 years ago     182MB
+[root@ip-192-168-10-18 ~]# docker tag ubuntu:latest myawspk/mydockerrepo:myubuntu
+[root@ip-192-168-10-18 ~]# docker image ls
+REPOSITORY                                             TAG        IMAGE ID       CREATED         SIZE
+ubuntu                                                 latest     cdb68b455a14   2 days ago      77.8MB
+myawspk/mydockerrepo                                   myubuntu   cdb68b455a14   2 days ago      77.8MB
+myapache                                               latest     b159f909e646   8 days ago      224MB
+httpd                                                  latest     d16a51d08814   3 weeks ago     145MB
+ubuntu                                                 <none>     216c552ea5ba   3 weeks ago     77.8MB
+058188331574.dkr.ecr.us-east-1.amazonaws.com/pradeep   myfile     7981f152fdbd   5 weeks ago     65.5MB
+hello-world                                            latest     feb5d9fea6a5   13 months ago   13.3kB
+selva95/pyapp                                          <none>     4fac74ce1262   19 months ago   122MB
+tekfik/chrome                                          latest     3f40b28e279d   2 years ago     757MB
+username/repo                                          <none>     c7f5ee4d4030   5 years ago     182MB
+[root@ip-192-168-10-18 ~]# docker push  myawspk/mydockerrepo:myubuntu
+The push refers to repository [docker.io/myawspk/mydockerrepo]
+7ea4455e747e: Mounted from library/ubuntu
+myubuntu: digest: sha256:dda6886d8d153a2d86f046c9335123c6151d83fd63e446b752ed8d9da261205d size: 529
+[root@ip-192-168-10-18 ~]#
+
+
+# Simple commands are also possible
+docker exec -it apache2 tail -f /var/log/apache2/access.log
+
+# Want even more simple? Run this
+docker exec -it apache2 netstat -plnt
+
+# Delete the new container
+docker container rm apache2
+
+# Denied? Do it forcefully.
+docker container rm -f apache2
+
+# Check container status
+# Force kill the old apache container
+docker container kill apache1
+
+# Check container status again
+docker container ls -a
+
+# Too tired to remove all containers? There's a bash shortcut
+# WARNING: This removes all containers. Don't worry, your image is still there.
+docker container rm -f $(docker container ls -aq)
+
+# Check container status
+docker container ls -a
+
+
+----------------------------------------------------------------------------------------------------------------------
+
+# Docker Volumes
+mkdir /root/mydata
+
+# Mounting bind mount to container
+docker run -itd --name u1 -v /root/mydata:/mydata ubuntu
+
+# Creating a file in mount
+docker exec -it u1 bash
+  cd /mydata
+  echo 'Hi' abc.txt
+  exit
+
+docker ps -a
+
+# Checking the file
+ll /root/mydata
+sudo bash -c "echo 'Hello' /root/mydata/abc.txt"
+# echo 'Hello' | sudo tee /root/mydata/abc.txt
+
+cat /root/mydata/abc.txt
+
+docker exec -it u1 bash
+  cd /mydata
+  cat abc.txt
+  exit
+
+docker rm -f u1
+
+# Multiple bind mounts
+docker run -itd --name u1 \
+-v /root/mydata:/mydata1 \
+-v /root/mydata:/mydata2 ubuntu
+
+echo 'MyUbuntuFile' /root/mydata/ubuntu.txt
+
+ll /root/mydata
+
+docker exec -it u1 bash
+  cd /mydata1
+  ls -la
+  echo 'Hi' >abc.txt
+  cd /mydata2
+  cat abc.txt
+  echo 'Working?' >ubuntu.txt
+  cd /mydata1
+  cat ubuntu.txt
+  ls -la
+  exit
+
+docker run -itd --name u2 -v /root/mydata:/mydata ubuntu
+docker exec -it u2 bash
+  cd /mydata
+  cat abc.txt
+  echo '0123' abc.txt
+  exit
+
+docker inspect u1
+
+# Read-only bind mount
+docker run -itd --name u3 -v /root/mydata:/mydata:ro ubuntu
+
+docker exec -it u3 bash
+  cd /mydata
+  cat abc.txt
+  echo 'XYZ' abc.txt
+  exit
+
+docker run -itd --name a1 \
+-v /root/mydata:/var/www/html \
+-p 80:80 myapache
+
+docker run -itd --name a2 \
+-v /root/mydata:/var/www/html \
+-p 81:80 myapache
+
+curl localhost:80/abc.txt
+curl localhost:81/abc.txt
+
+docker container rm -f $(docker container ls -aq)
+
+ 

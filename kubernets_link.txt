@@ -1,0 +1,7 @@
+#command for kubernets
+https://github.com/mycloudazure/K8s_class/blob/main/kubeadm_init
+
+
+
+#definition and more info about kubernets
+https://github.com/mycloudazure/K8s_class/blob/main/K8s_componentes

@@ -1,0 +1,645 @@
+#!/bin/bash
+sed 's/PasswordAuthentication no/PasswordAuthentication yes/' -i /etc/ssh/sshd_config
+systemctl restart sshd
+service sshd restart
+
+#TODO: replace bob with your desired username
+useradd bob
+# TODO: replace password123 with desired password and change bob to your username chosen in useradd 
+echo "password123" | passwd --stdin ec2-user
+echo "password123" | passwd --stdin root
+
+Advantages of Ansible
+Although there are various advantages of using Ansible in your infra but below are few and important advantages.
+
+Agentless
+No need to install nodes on remote servers
+Totally rely on SSH
+Various big organisations uses Ansible such as  Apple, NASA, Juniper etc.
+
+1. Install Ansible using EPEL Repository
+Download epel repository on the amazon linux 2 instance as follows,
+
+$ wget https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+Next, Install epel repository using yum.
+
+$ sudo yum install epel-release-latest-7.noarch.rpm
+Update epel repository as follows,
+
+$ sudo yum update -y
+Now install all individual packages inside the repository along with ansible.
+
+$ sudo yum install python python-devel python-pip openssl ansible -y
+2. Install Ansible using amazon-linux-extras Repository
+Ansible package can be installed on amazon linux using amazon provided packages.
+
+$ sudo amazon-linux-extras install ansible2
+Check Ansible version
+To verify whether Ansible is installed on your machine, you can verify it as follows,
+
+$ ansible --version
+
+ansible 2.9.13
+config file = /etc/ansible/ansible.cfg
+configured module search path = [u'/root/.ansible/plugins/modules', u'/usr/share/ansible/plugins/modules']
+ansible python module location = /usr/lib/python2.7/site-packages/ansible
+executable location = /bin/ansible
+python version = 2.7.18 (default, Aug 27 2020, 21:22:52) [GCC 7.3.1 20180712 (Red Hat 7.3.1-9)]
+Configure Ansible on Amazon Linux-2
+Firstly, create new users on master & client machines.
+
+
+[root@ip-192-168-10-149 ~]# sudo  useradd ansadmin
+[root@ip-192-168-10-149 ~]# sudo  passwd ansadmin
+Changing password for user ansadmin.
+New password:
+BAD PASSWORD: The password is shorter than 8 characters
+Retype new password:
+passwd: all authentication tokens updated successfully.
+[root@ip-192-168-10-149 ~]#
+
+
+Grant admin access to created user for master & client machines. You need login as root to make changes here. We have added ansadmin user in sudoers file and enable authentication without password each time.
+
+$ sudo visudo
+sudoer file
+
+## Allow root to run any commands anywhere
+root    ALL=(ALL)       ALL
+ansadmin ALL=(ALL)       NOPASSWD: ALL
+
+Thereafter, Allow password authentication to yes so that ldap users can login using username & password on master & client machines
+
+$ sudo vi /etc/ssh/sshd_config
+sshd_config file
+Uncomment above highlighted line and enable password authentication to YES. Restart sshd service.
+
+$ sudo service sshd restart
+Login as ansadmin user and generate public and private keys on client machine.
+
+$ ssh-keygen
+ssh-key for passwordless authentication
+Now you need to copy ssh keys from client to master machine. First check the private ip address of the master node as follows,
+
+$ ifconfig -a
+ifconfig on aws ec2 instance
+Copy the public key file from client to master node.
+
+$ ssh-copy-id -i /home/ansadmin/.ssh/id_rsa.pub ansadmin@172.31.17.1
+sshd_config file
+To verify this, try to login to client machine from master using ssh method.
+
+
+$ ssh ansadmin@172.31.17.2
+It will ask password for the first time. Next time it won’t ask password. Here, 172.31.17.2 is the private ip address of client node.
+
+Managing inventory file on Master
+A default hosts file is created while ansible installation. To manage your infrastructure you need to make entries of your available server machines in this hosts file.
+
+$ sudo  vi /etc/ansible/hosts
+Insert client machines ip address into the inventory file:
+
+ansible host file
+Simply we put client machine ip address here. You can create custom inventory file if you do not want to use default hosts file.
+
+
+Managing inventory file on Master
+A default hosts file is created while ansible installation. To manage your infrastructure you need to make entries of your available server machines in this hosts file.
+
+$ sudo  vi /etc/ansible/hosts
+Insert client machines ip address into the inventory file:
+
+ansible host file
+Simply we put client machine ip address here. You can create custom inventory file if you do not want to use default hosts file.
+
+Perform Ping test from Master to Client machines
+Ansible contains various modules to manage IT infrastructure.  Here, we will use ping module to check connection status between master and client node as follows,
+
+$ ansible -m ping ec2-servers
+ansible ping test 
+Finally, client machine can be accessed from master node through ansible.
+
+
+
+
+
+
+
+Perform Ping test from Master to Client machines
+Ansible contains various modules to manage IT infrastructure.  Here, we will use ping module to check connection status between master and client node as follows,
+
+$ 
+ansible ping test 
+Finally, client machine can be accessed from master node through ansible.
+
+
+------------------------------------------------------------------------------------
+
+webex meeting link
+
+https://meet296.webex.com/meet/pr26410753776
+
+
+
+-----------
+Ansible linux -m shell -a “ free -m” 
+
+Ansible all -m shell -a “ free -m” 
+
+
+
+To list all  ansible modules 
+$ ansible-doc -l
+
+$ ansible-doc -l | grep shell 
+
+[root@ip-192-168-10-8 ~]#  ansible-doc -l | grep shell
+shell                                                         Execute shell commands on targets
+vmware_vm_shell                                               Run commands in a VMware guest operating system
+win_shell                                                     Execute shell commands on target hosts
+
+------------------------------
+
+https://docs.ansible.com/ansible/2.9/modules/list_of_all_modules.html
+
+
+
+$  ansible servers -m copy -a "src=/tmp/myfile.txt dest=/tmp"
+
+
+$  ansible servers -m fetch -a "src=/tmp/myfile.txt dest=/tmp"
+--------------------
+
+
+vi /home/ansadmin/myplay.yaml
+
+---
+ - name: Finding uptime and free ram
+   hosts: all
+   tasks:
+   - name: Finding uptime
+     shell: uptime
+     register: up_time
+   - debug:
+       var: up_time.stdout_lines
+   - name: Finding RAM info 
+     shell: free -g
+     register: ram_info
+   - debug:
+       var: ram_info.stdout_lines
+
+ansible-playbook /home/ansadmin/myplay.yaml
+
+
+vi playy.yaml
+
+---
+ - hosts: all
+   tasks:
+   - yum:
+      name: wget
+      state: present
+   - yum:
+      name: vim
+      state: present
+
+
+
+https://docs.ansible.com/ansible/latest/collections/ansible/builtin/yum_module.html#examples
+
+
+Task 
+
+Reff : https://linoxide.com/ansible-playbook-to-install-and-setup-apache-on-ubuntu/
+
+---
+- hosts: myserver
+  become: true
+  vars:
+         - vars/default.yml
+- tasks:
+    - name: Install latest version of Apache
+      apt: name=apache2 update_cache=yes state=latest
+
+    - name: Create document root for your domain
+      file:
+        path: "/var/www/{{ http_host }}"
+        state: directory
+        owner: "{{ app_user }}"
+        mode: '0755'
+
+    - name: Copy your index page
+      template:
+        src: "files/index.html.j2"
+        dest: "/var/www/{{ http_host }}/index.html"
+
+    - name: Set up virtuahHost
+      template:
+        src: "files/apache.conf.j2"
+        dest: "/etc/apache2/sites-available/{{ http_conf }}"
+      notify: restart-apache
+
+    - name: "UFW firewall allow HTTP on port {{ http_port }}"
+      ufw:
+        rule: allow
+        port: "{{ http_port }}"
+        proto: tcp
+
+  handlers:
+    - name: restart-apache
+      service:
+        name: apache2
+        state: restarted
+        
+        
+        #command for kubernets
+https://github.com/mycloudazure/K8s_class/blob/main/kubeadm_init
+
+
+
+#definition and more info about kubernets
+https://github.com/mycloudazure/K8s_class/blob/ma//teams.live.com/l/invite/FEAVigNPrw_HQ9sGwI
+------------------------------------------------------------------------------------------------
+
+
+67  alias k=kubectl
+   68  k get nodes
+   69  k get namespaces
+   70  k get ns
+   71  kubectl get pods -n kube-system
+   72  kubectl cluster-info
+   73  kubectl get pods -n default
+   74  kubectl get pods
+   75  k create ns pradeep
+   76  k get ns
+   77  k get pods -n pradeep
+   78  k get all -n pradeep
+   79  clear
+   80  alias k=kubectl
+   81  k get ndoes
+   82  k get nodes
+   83  clear
+   84  k get nodes
+   85  k get nodes -o wide
+   86  clear
+   87  k get nodes -o wide
+   88  kubetl describe node master-node
+   89  k get nodes
+   90  kubectl describe node master-node
+   91  k get nodes
+   92  kubectl get ns
+   93  k get nodes -o wide
+   94  kubectl describe node worker-node
+   95  clear
+   96  k get ns
+   97  k get nodes
+   98  kubectl cluster-info
+   99  kubectl get pods
+  100  alias k=kubectl
+  101  k get ns
+  102  k get pods -n kube-ystem
+  103  k get pods -n kube-system
+  104  k get pods -n kube-system -o wide
+  105  history
+[root@master-node ~]#
+
+vi my-namespace.yaml 
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: mynamespace
+  
+kubectl create -f my-namespace.yaml
+
+# Alternatively, you can create namespace using below command:
+
+kubectl create namespace <insert-namespace-name-here>
+
+# List the namespaces in the cluster 
+
+kubectl get namespaces
+
+# Delete a namespace with
+
+kubectl delete namespaces <insert-some-namespace-name>
+
+
+vi nginx-pod.yml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    apps: nginx
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+    ports:
+    - containerPort: 80
+
+
+# create pod with a yaml 
+
+
+# List the pods 
+
+kubectl get pods 
+
+kubectl get pods -o wide
+
+kubectl describe pods nginx
+
+curl <POD_IP>
+
+# Expose the pod useing a svc 
+
+kubectl expose pod nginx --port=80 --name=nginx-http
+
+kubectl get svc
+
+curl <SVC_IP>
+
+# Port value must be between 30000-32767
+
+
+
+kubectl expose pod nginx --type=NodePort
+
+kubectl get svc
+
+curl <SVC_IP>
+
+kubectl delete svc nginx-http
+
+
+
+
+
+54.81.145.12
+
+
+root
+password123
+
+
+
+vi nginx-rs.yml
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: nginx
+spec:
+  replicas: 3
+  selector:
+    apps: nginx
+  template:
+    metadata:
+      name: nginx
+      labels:
+        apps: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+
+
+kubectl create -f nginx-rs.yml
+
+kubectl get rc -o wide
+
+kubectl describe rc nginx
+
+kubectl get pods
+
+kubectl get pods -o wide
+
+vi nginx-svc.yml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx
+  labels:
+    apps: nginx
+spec:
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  selector:
+    apps: nginx
+  type: LoadBalancer
+
+
+------------------------------
+
+vi deploymnet.yaml
+
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx 
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 100m
+            memory: 100Mi
+
+kubectl create -f deploymnet.yaml
+
+vi recreate.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    app: my-app
+spec:
+  replicas: 3
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: v2.0.0
+    spec:
+      containers:
+      - name: my-app
+        image: containersol/k8s-deployment-strategies
+        ports:
+        - name: http
+          containerPort: 8080
+
+
+
+vi rolling_update.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+  labels:
+    app: my-app
+spec:
+  replicas: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: v2.0.0
+    spec:
+      containers:
+      - name: my-app
+        image: containersol/k8s-deployment-strategies
+        ports:
+        - name: http
+          containerPort: 8080
+
+--------------------------
+
+  203  alias k=kubectl
+  204  k get nodes
+  205  k get ppods -n pradeep
+  206  k get pods -n pradeep
+  207  k delete pod nginx
+  208   k get pods -n pradeep
+  209  k delete pod nginx  -n pradeep
+  210   k get pods -n pradeep
+  211  vi nginx-rs.yml
+  212  k create -f nginx-rs.yml
+  213  k create -f nginx-rs.yml -n pradeep
+  214  k get pods -n pradeep
+  215  vi nginx-rs.yml
+  216  k get rs
+  217  k get rc -n pradeep
+  218  k get pods -n pradeep
+  219  k delete pods -n pradeep nginx-f69dj
+  220  k get pods -n pradeep
+  221  k delete pod -n pradeep nginx-d4l9g nginx-prbbh nginx-vsmvj
+  222  k get pods -n pradeep
+  223  k get rc -n pradeep
+  224  k delete rc nginx  -n pradeep
+  225   k get pods -n pradeep
+  226  kubectl get rc -o wide
+  227  kubectl describe rc nginx
+  228  vi deploymnet.yaml
+  229  kubectl create -f deploymnet.yaml -n pradeep
+  230  vi deploymnet.yaml
+  231  kubectl create -f deploymnet.yaml -n pradeep
+  232  vi deploymnet.yaml
+  233  kubectl create -f deploymnet.yaml -n pradeep
+  234  vi deploymnet.yaml
+  235  kubectl create -f deploymnet.yaml -n pradeep
+  236  k get deploymnet -n pradeep
+  237  k get deployment -n pradeep
+  238  k get pods -n pradeep
+  239  k get deploy -n pradeep
+  240  vi deploymnet.yaml
+  241  k get pods -n pradeep
+  242  k delete pod -n pradeep nginx-6d4cf6548f-4hn47 nginx-6d4cf6548f-hmj7p nginx-6d4cf6548f-kbnlv
+  243  k get pods -n pradeep
+  244  k describe deploy nginx  -n pradeep
+  245  k get deploy -n pradeep
+  246  k scale deploy nginx --replicas=0
+  247  k scale deploy nginx --replicas=0 -n pradep
+  248  k scale deploy nginx --replicas=0 -n pradeep
+  249  k get pods -n pradeep
+  250  k get deploy -n pradeep
+  251  k scale deploy nginx --replicas=5 -n pradeep
+  252  k get pods -n pradeep
+  253  k describe deploy nginx  -n pradeep
+  254  k get deploy -n pradeep
+  255  k delete  -f deploymnet.yaml
+  256  k delete  -f deploymnet.yaml  -n pradeep
+  257  k get deploy -n pradeep
+  258  vi recreate.yaml
+  259  k apply  -f  recreate.yaml
+  260  k apply  -f  recreate.yaml -n pradeep
+  261  k get pods -n pradeep
+  262  k get deploy -n pradeep
+  263  k describe deploy my-app  -n pradeep
+  264  k get pods -n pradeep
+  265  k get pods -n pradeep  -o wide
+  266  curl 10.244.1.38:8080
+  267  k describe pod my-app-b88967595-9b4gh
+  268  k describe pod my-app-b88967595-9b4gh  -n pradeep
+  269  k get deploy -n pradeep
+  270  kubectl set image deployment/my-app [root@master-node ~]# kubectl set image deployment/my-app
+  271  k get deploy -n pradeep
+  272   kubectl set image deployment my-app nginx=hello-world:nanoserver-1809 --record
+  273  k get pods -n pradeep  -o wide
+  274   kubectl set image deployment my-app my-app=hello-world:nanoserver-1809 --record
+  275   kubectl set image deployment my-app my-app=httpd --record
+  276   kubectl rollout status  deployment my-app
+  277  k get pods -n pradeep
+  278  k describe pod my-app-b88967595-9b4gh  -n pradeep
+  279  k get pods -n pradeep
+  280  kubectl set image deployment my-app my-app=httpd --record  -n pradeep
+  281   kubectl rollout status  deployment my-app  -n pradeep
+  282  k get pods -n pradeep
+  283  k describe pod my-app-57c5f65c5f-g9lbs  -n pradeep
+  284  kubectl rollout undo deployment my-app -n pradeep
+  285  k get pods -n pradeep
+  286   kubectl rollout status  deployment my-app  -n pradeep
+  287  k get pods -n pradeep
+  288  k describe pod my-app-b88967595-b8lk4 -n pradeep
+  289  k get pods
+  290  k get pods  -n pradeep
+  291  k get pods  -n pradeep  -o wide
+  292https://collabedit.com/download?id=ceunv  curl 10.244.1.48
+  293  curl 10.244.1.48:8080
+  294  kubectl set image deployment my-app my-app=httpd --record  -n pradeep
+  295  k get pods  -n pradeep  -o wide
+  296  curl 10.244.1.53
+  297  kubectl rollout undo deployment my-app -n pradeep
+  298  k get pods  -n pradeep  -o wide
+  299  curl 10.244.1.56:8080
+  300  kubectl set image deployment my-app my-app=nginx --record  -n pradeep
+  301  k get pods  -n pradeep  -o wide
+  302  curl 10.244.1.57
+  303  vi rolling_update.yaml
+  304  k get deploy -n pradeep
+  305   k delete deploy my-app -n pradeep
+  306  k get deploy -n pradeep
+  307  k create -f rolling_update.yaml -n pradeep
+  308  k get deploy -n pradeep
+  309  k get pods -n pradeep
+  310  kubectl set image deployment my-app my-app=nginx --record  -n pradeep
+  311  watch kubectl  get pods -n pradeep
+  312  k get deploy -n pradeep
+  313  k describe deploy  my-app   -n pradeep
+  314  history
+

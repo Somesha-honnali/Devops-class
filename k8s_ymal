@@ -1,0 +1,361 @@
+kubectl create ns evsc
+
+
+rbac.yaml
+
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: nfs-client-provisioner
+  # replace with namespace where provisioner is deployed
+  namespace: evsc
+---
+kind: ClusterRole
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: nfs-client-provisioner-runner
+rules:
+  - apiGroups: [""]
+    resources: ["nodes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["persistentvolumes"]
+    verbs: ["get", "list", "watch", "create", "delete"]
+  - apiGroups: [""]
+    resources: ["persistentvolumeclaims"]
+    verbs: ["get", "list", "watch", "update"]
+  - apiGroups: ["storage.k8s.io"]
+    resources: ["storageclasses"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: [""]
+    resources: ["events"]
+    verbs: ["create", "update", "patch"]
+---
+kind: ClusterRoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: run-nfs-client-provisioner
+subjects:
+  - kind: ServiceAccount
+    name: nfs-client-provisioner
+    # replace with namespace where provisioner is deployed
+    namespace: evsc
+roleRef:
+  kind: ClusterRole
+  name: nfs-client-provisioner-runner
+  apiGroup: rbac.authorization.k8s.io
+---
+kind: Role
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-nfs-client-provisioner
+  # replace with namespace where provisioner is deployed
+  namespace: evsc
+rules:
+  - apiGroups: [""]
+    resources: ["endpoints"]
+    verbs: ["get", "list", "watch", "create", "update", "patch"]
+---
+kind: RoleBinding
+apiVersion: rbac.authorization.k8s.io/v1
+metadata:
+  name: leader-locking-nfs-client-provisioner
+  # replace with namespace where provisioner is deployed
+  namespace: evsc
+subjects:
+  - kind: ServiceAccount
+    name: nfs-client-provisioner
+    # replace with namespace where provisioner is deployed
+    namespace: evsc
+roleRef:
+  kind: Role
+  name: leader-locking-nfs-client-provisioner
+  apiGroup: rbac.authorization.k8s.io
+
+
+
+-----------------------------------
+ cat deployment.yaml
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nfs-client-provisioner
+  labels:
+    app: nfs-client-provisioner
+  # replace with namespace where provisioner is deployed
+  namespace: evsc
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: nfs-client-provisioner
+  template:
+    metadata:
+      labels:
+        app: nfs-client-provisioner
+    spec:
+      serviceAccountName: nfs-client-provisioner
+      containers:
+        - name: nfs-client-provisioner
+          image: k8s.gcr.io/sig-storage/nfs-subdir-external-provisioner:v4.0.2
+          volumeMounts:
+            - name: nfs-client-root
+              mountPath: /persistentvolumes
+          env:
+            - name: PROVISIONER_NAME
+              value: k8s-sigs.io/nfs-subdir-external-provisioner
+            - name: NFS_SERVER
+              value: 10.73.96.102
+            - name: NFS_PATH
+              value: /DC-NFS-JFROG-PROD-DB
+      volumes:
+        - name: nfs-client-root
+          nfs:
+            server: 10.73.96.102
+            path: /DC-NFS-JFROG-PROD-DB
+
+
+
+-----------------------------------------------
+
+
+ cat class.yaml
+ 
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: managed-nfs-storage
+provisioner: k8s-sigs.io/nfs-subdir-external-provisioner # or choose another name, must match deployment's env PROVISIONER_NAME'
+parameters:
+  archiveOnDelete: "false"
+
+--------------------------------------------------
+cat pvc_test.yaml
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: task-pv-claim
+spec:
+  storageClassName: managed-nfs-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+
+----------------------------------------------------
+ 
+  cat test_pod.yaml
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pods-simple-pod
+spec:
+  containers:
+    - command:
+        - sleep
+        - "3600"
+      image: busybox
+      name: pods-simple-container
+
+----------------------------------------------------------
+ 
+ #history of storage class
+ 
+  showmount -e 10.73.96.102
+  467  vi deployment1.yaml
+  468  kubectl apply -f deployment1.yaml -n evsc
+  469  alias k=kubectl
+  470  k get pods -n evsc
+  471  k describe pod nfs-client-provisioner-59bcd8b74-8h87g -n evsc
+  472  k get pods -n evsc
+  473  ll
+  474  cat class.yaml
+  475  k apply -f class.yaml -n evsc
+  476  k get sc
+  477  cat pvc_test.yaml
+  478  k apply -f pvc_test.yaml -n evsc
+  479  k get pvc -n evsc
+  480  k get pv -n evsc
+    360  /kuberntes-nginx-co                                                                                                             ntroller.git
+  361  cd kuberntes-nginx-controller.git  
+  362  cd kuberntes-nginx-controller
+  363  : Install nginx controller
+  364  kubectl apply -f nginx-ingress.yaml
+  365  kubectl get pods -n ingress-nginx
+  366  kubectl get services -n ingress-nginx
+  367  vi apple.yaml
+  368  kubectl create -f apple.yaml -n reshmy
+  369  vi apple.yaml
+  370  kubectl create -f apple.yaml -n reshmy
+  371  vi apple.yaml
+  372  kubectl create -f apple.yaml -n reshmy
+  373  vi apple.yaml
+  374  cd ..
+  375  vi apple.yaml
+  376  kubectl create -f apple.yaml -n reshmy
+  377  vi banana.yaml
+  378  k create -f banana.yaml -n reshmy
+  379  kubectl create -f banana.yaml -n reshmy
+  380  k get pods -n reshmy 
+  381  kubectl get pods -n reshmy
+  382  alaias k=kubectl
+  383  alias k=kubectl
+  384  k get pods -n reshmy -o wide
+  385  k get svc -n reshmy
+  386  curl 10.97.10.22:5678
+  387  curl  10.110.113.142:5678 
+  388  vi ingress.yaml
+  389  k create -f ingress.yaml -n reshmy
+  390  k get ing -n res
+  391  vi /etc/hots
+  392  vi /etc/hosts
+  393  sudo su -
+  394  k get svc -n reshmy
+  395  kubectl get svc -n reshmy
+  396  curl http:example.com:5678
+  397  curl http:example.com:5678/apple
+  398  curl http://example.com:5678/apple
+  399  history
+  400  k get svc -n ingress-nginx
+  401  alias k=kubectl
+  402  k get svc -n ingress-nginx
+  403  vi /etc/hosts
+  404  curl -kL http://example.com/apple
+  405  curl -k example.com:30773/apple
+  406  curl -k example.com:30773/banana
+  407  curl -kl  http://example.com/apple
+  408  mkldir /nfsshare
+  409  mkdir /nfsshare
+  410  showmount -e 192.168.0.100 (nfs server ip  ) 
+  411  showmount -e  192.168.53.166
+  412  mount -t nfs 192.168.0.100:/nfsshare /nfsshare
+  413  mount -t nfs 192.168.53.166
+  414  mount -t nfs 192.168.53.166:/nfsshare /nfsshare
+  415    mkdir /nfsshare
+  416  showmount -e 192.168.53.166
+  417  mount -t nfs 192.168.53.166:/nfsshare /nfsshare
+  418  ls
+  419  cd /nfsshare
+  420  ls
+  421  ll
+  422  cd ..
+  423  mount | grep nfs
+  424  clear
+  425   vi /etc/fstab
+  426  ll /nfshare
+  427  ll /nfsshare
+  428  cat nfs.txt
+  429  cat nfsshare.txt
+  430  cat nfstest.txt
+  431  cd /nfsshare
+  432  ll
+  433  cat nfstest.txt
+  434  kubectl create ns evsc
+  435  rbac.yaml
+  436  vi rbac.yaml
+  437  vi deployment.yaml
+  438  vi deployment1.yaml
+  439  vi class.yaml
+  440  vi pvc_test.yaml
+  441  vi test_pod.yaml
+  442  kubectl create -f rbac.yaml evsc
+  443  kubectl create -f rbac.yaml
+  444  history
+  445  mount | grep nfs
+  
+  
+  ------------------------------
+  Reff : https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/
+  
+  Host mount 
+  
+  pods/storage/pv-volume.yaml Copy pods/storage/pv-volume.yaml to clipboard
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: task-pv-volume
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 10Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/mnt/data"
+
+
+
+--------------------------------------------
+
+PVC mount 
+
+vi test_pod_pvc.yaml
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: task-pv-pod
+spec:
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+        claimName: task-pv-claim
+  containers:
+    - name: task-pv-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: task-pv-storage
+
+---------
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-pv-pod
+spec:
+  containers:
+    - name: nginx-container
+      image: nginx
+      ports:
+        - containerPort: 80
+          name: "http-server"
+      volumeMounts:
+        - mountPath: "/usr/share/nginx/html"
+          name: nginx-storage
+  volumes:
+    - name: nginx-storage
+      persistentVolumeClaim:
+        claimName: nginx-pv-claim
+
+
+-----------------------
+
+
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test
+spec:
+  containers:
+    - name: test
+      image: httpd:latest
+      volumeMounts:
+        # a mount for site-data
+        - name: config
+          mountPath: /var/www/html/
+  volumes:
+    - name: config
+      persistentVolumeClaim:
+        claimName: task-pv-claim
+

@@ -1,0 +1,85 @@
+Last login: Sun Dec 18 04:44:40 2022 from ec2-18-206-107-28.compute-1.amazonaws.com
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+30 package(s) needed for security, out of 49 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@clinet ~]$ 
+[ec2-user@clinet ~]$ 
+[ec2-user@clinet ~]$ 
+[ec2-user@clinet ~]$ 
+[ec2-user@clinet ~]$ 
+[ec2-user@clinet ~]$ history
+    1  clear
+    2  sudo yem update
+    3  sudo yum update
+    4  sudo -i
+    5  hostnamectl sey-hostname clinet
+    6  hostnamectl set-hostname clinet
+    7  bash
+    8  ls
+    9  sudo -i
+   10  ls
+   11  sudo -i
+   12  suod -i
+   13  sudo -i
+   14  clear]
+   15  clear
+   16  sudo -i
+   17  sudo -i
+   18  ls
+   19  sudo -i
+   20  history
+   
+   ANSIBLE IN ROOT
+   30 package(s) needed for security, out of 49 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@clinet ~]$ sudo -i
+[root@clinet ~]# history
+    1  hostnamects set-hostname clinet
+    2  hostnamectl set-hostname clinet
+    3  HOSTNAME clinet
+    4  HOSTNAME=clinet
+    5  reboot
+    6  clear
+    7  useradd ansadmin
+    8  passwd asnadmin
+    9  passwd ansadmin
+   10  sudo visudo
+   11  $ sudo vi /etc/ssh/sshd_config
+   12   sudo vi /etc/ssh/sshd_config
+   13  sudo service sshd restart
+   14  su ansadmin
+   15  clear
+   16  ls
+   17  cd /tmp/
+   18  ls
+   19  cat 1.txt 
+   20  rpm -a |grep -
+   21  rpm -a |grep -wget
+   22  rpm -a |grep -yum
+   23  yum --version
+   24  ll
+   25  cd /tmp/
+   26  ll
+   27  pwd
+   28  clear
+   29  ll
+   30  ls -a
+   31  cat 1.txt
+   32  ls -l
+   33  ll- s
+   34  ls -l
+   35  top
+   36  bottom
+   37  botom
+   38  bottom
+   39  down
+   40  ssh-keygen
+   41  ls
+   42  ll
+   43  history
+[root@clinet ~]# 

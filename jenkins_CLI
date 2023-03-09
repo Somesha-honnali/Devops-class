@@ -1,0 +1,256 @@
+
+       __|  __|_  )
+       _|  (     /   Amazon Linux 2 AMI
+      ___|\___|___|
+
+https://aws.amazon.com/amazon-linux-2/
+34 package(s) needed for security, out of 57 available
+Run "sudo yum update" to apply all updates.
+[ec2-user@ip-192-168-0-9 ~]$ 
+[ec2-user@ip-192-168-0-9 ~]$ 
+[ec2-user@ip-192-168-0-9 ~]$ 
+[ec2-user@ip-192-168-0-9 ~]$ 
+[ec2-user@ip-192-168-0-9 ~]$ history
+    1  history
+[ec2-user@ip-192-168-0-9 ~]$ 
+[ec2-user@ip-192-168-0-9 ~]$ 
+[ec2-user@ip-192-168-0-9 ~]$ history
+    1  history
+[ec2-user@ip-192-168-0-9 ~]$ ll
+total 0
+[ec2-user@ip-192-168-0-9 ~]$ sudo -i
+[root@ip-192-168-0-9 ~]# history 
+    1  df -h
+    2  lsblk
+    3  fdisk /dev/xvdf
+    4  lsblk
+    5  fdisk l
+    6  mkfs.xfs /dev/xvdf1
+    7  mkdir app
+    8  cat > touch 1.txt >app
+    9  cd app/
+   10  ls
+   11  nano 1.txt
+   12  cat> echo"hi" 1.txt
+   13  ls
+   14  rm -R 1.txtwq\:q\! echohi 
+   15  ls
+   16  touch 1.txt 2.txt
+   17  cd ..
+   18  mount /dev/xvdf1/app
+   19  mount /dev/xvdf1/ app
+   20  mount /dev/xvdf1/app
+   21  vi /etc/fstab 
+   22  sudo yum install java-1.8.0-openjdk-devel
+   23  curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee/etc/yum.repos.d/jenkins.repo
+   24  curl --silent --location http://pkg.jenkins-ci.org/redhat-stable/jenkins.repo | sudo tee /etc/yum.repos.d/jenkins.repo
+   25  sudo rpm --import https://jenkins-ci.org/redhat/jenkins-ci.org.key
+   26  sudo yum install jenkins
+   27  sudo systemctl start jenkins
+   28  sudo systemctl enable jenkins
+   29  systemctl enable jenkins
+   30  systemctl start jenkins
+   31  systemctl status jenkins
+   32  docker ps
+   33  netstat -plnt 
+   34  systemctl restart jenkins
+   35  systemctl status jenkins.service
+   36  sudo yum update –y
+   37  sudo wget -O /etc/yum.repos.d/jenkins.repo     https://pkg.jenkins.io/redhat-stable/jenkins.repo
+   38  sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+   39  sudo yum upgrade
+   40  sudo amazon-linux-extras install java-openjdk11 -y
+   41  sudo yum install jenkins -y
+   42  systemctl enable jenkins
+   43  systemctl start jenkins
+   44  systemctl status jenkins
+   45  journalctl -xe"
+   46  systemctl status jenkins.service
+   47  update-alternatives --config java
+   48  systemctl start jenkins
+   49  systemctl status jenkins
+   50  curl ifconfig.co
+   51  curl gogole.com
+   52  sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+   53  curl gogole.com
+   54  systemctl status service
+   55  systemctl status jenkins
+   56  systemctl status jenkins 
+   57  git clone https://github.com/Somesha-honnali/myrepo/blob/main/script.sh
+   58  git clone https://github.com/Somesha-honnali/myrepo.git
+   59  yum install git
+   60  git clone https://github.com/Somesha-honnali/myrepo.git
+   61  ll
+   62  cd myrepo/
+   63  ll
+   64  sh script.sh 
+   65  git clone FROM ubuntu:18.04
+   66  RUN  apt-get update
+   67  RUN  apt-get install -y apache2 curl net-tools
+   68  COPY ./index.html /var/www/html/index.html
+   69  ENTRYPOINT apachectl -D FOREGROUND
+   70  git clone FROM ubuntu:18.04
+   71  RUN  apt-get update
+   72  RUN  apt-get install -y apache2 curl net-tools
+   73  COPY ./index.html /var/www/html/index.html
+   74  ENTRYPOINT apachectl -D FOREGROUND
+   75  git clone https://github.com/Somesha-honnali/myrepo.git
+   76  ll
+   77  cd myrepo/
+   78  ll
+   79  yum install docker
+   80  docker build https://github.com/Somesha-honnali/myrepo.git
+   81  docker build https://github.com/Somesha-honnali
+   82  ll
+   83  docker ps
+   84  systemctl docker restart
+   85  systemctl restart docker
+   86  docker ps
+   87  docker build -t somesha/git:tagname_1
+   88  docker build -t somesha/git:myimage
+   89   .
+   90  docker build -t somesha/git:myimage .
+   91  systemctl daemon-reload 
+   92  systemctl restart docker 
+   93  docker build -t somesha/git:myimage .
+   94  ll
+   95  cd ..
+   96  ll
+   97  rm -rf *
+   98  ll
+   99  git clone https://github.com/Somesha-honnali/myrepo.git
+  100  ll
+  101  cd myrepo/
+  102  docker build -t somesha/git:myimage .
+  103  vi index.hyml
+  104  rm index.hyml 
+  105  vi index.html 
+  106  docker build -t somesha/git:myimage .
+  107  docker image ls | grep myimage
+  108  docker push somesha/git:myimage 
+  109  docker login -u somesh8022@gmail.com -p Somesh@1234
+  110  docker login 
+  111  docker push somesha/git:myimage 
+  112  docker rmi somesha/git:myimage 
+  113  docker run -itd --name mywebimage -p 80:80 somesha/git:myimage 
+  114  curl localhost
+  115  history
+  116  docker push somesha/git:myimage 
+  117    111  docker rmi somesha/git:myimage 
+  118    112  docker run -itd --name mywebimage -p 80:80 somesha/git:myimage 
+  119  docker push somesha/git:myimage 
+  120    111  docker rmi somesha/git:myimage 
+  121    112  docker run -itd --name mywebimage -p 80:80 somesha/git:myimage 
+  122  doker login
+  123  docker login
+  124  clear
+  125  git clone https://github.com/Somesha-honnali/myrepo.git
+  126  cd myrepo/
+  127  docker login -u somesha -p Somesh@1234
+  128  docker build -t somesha/git:myimage .
+  129  docker image ls | grep myimage
+  130  docker push somesha/git:myimage 
+  131  docker rmi somesha/git:myimage 
+  132  docker run -itd --name mywebimage -p 80:80 somesha/git:myimage 
+  133  vi my_passwd
+  134  rm my_passwd
+  135  vi my_password.txt
+  136  vi /var/lib/jenkins/my_password.txt
+  137  cat ~/my_password.txt | docker login --username foo --password-stdin
+  138  vi ~/my_password.txt | docker login --username foo --password-stdin
+  139  vim ~/my_password.txt | docker login --username somesha --password-stdin
+  140  cat /var/lib/jenkins/my_password.txt 
+  141  docker daemon restart
+  142  systemctl restart docker
+  143  clear
+  144  git clone https://github.com/Somesha-honnali/myrepo.git
+  145  cd myrepo/
+  146  cat ~/my_password.txt | docker login --username somesha --password-stdin
+  147  docker build -t somesha/git:myimage .
+  148  docker image ls | grep myimage
+  149  docker push somesha/git:myimage 
+  150  docker rmi somesha/git:myimage 
+  151  ls
+  152  cd ..
+  153  ll
+  154  pwd
+  155  cd ..
+  156  cat /var/lib/jenkins/my_password.txt
+  157  docker login --username somesha --password cat /var/lib/jenkins/my_password.txt
+  158  systemctl deamon -reload
+  159  systemctl  
+  160  systemctl deamon-reload
+  161  systemctl daemon-reload
+  162  systemctl restart docker
+  163  docker login --username somesha --password cat /var/lib/jenkins/my_password.txt
+  164  docker login --username somesha --password Somesh@1234
+  165  docker login --username somesha --password-stdin Somesh@1234
+  166  docker login localhost:8080
+  167  cat ~/my_password.txt | docker login --username foo --password-stdin
+  168  cat ~/my_password.txt | docker login --username somesha --password-stdin
+  169  cat /root/.docker/config.json.
+  170  cat /root/.docker/confi
+  171  cat /root/.docke
+  172  cat /root/.docker/
+  173  cd /root/.docker/
+  174  ls
+  175  vi config.json 
+  176  cat ~/my_password.txt | docker login --username somesha --password-stdin
+  177  "ServerURL": "https://index.docker.io/v1",
+  178    "Username": "david",
+  179    "Secret": "passw0rd1"
+  180  vi config.json 
+  181  docker login localhost:8080
+  182  cd ..
+  183  ll
+  184  sudo groupadd docker
+  185  sudo usermod -aG docker somesha
+  186  sudo usermod -aG docker ${somesha}
+  187  sudo usermod -aG docker -u somesha
+  188  sudo usermod -aG docker -u somesh8022@gamil.com
+  189  docker ps
+  190  docker ps -a
+  191  sudo systemctl enable docker.service
+  192   sudo systemctl enable containerd.service
+  193  docker run helloworld
+  194  docker run hello-world
+  195  clear
+  196  docker run hello-world
+  197  ls -last /var/run/docker.sock
+  198  whoiam
+  199  whoami
+  200  cat /etc/group | grep docker
+  201  docker ps -a
+  202  docker ID
+  203  docker  --help
+  204  cat /var/run/docker.sock
+  205  ls -last /var/run/docker.sock
+  206  chmod +x /var/run/docker.sock
+  207  ls -last /var/run/docker.sock
+  208  docker login --help
+  209  cat /etc/passwd
+  210  passwd -s jenkins 
+  211  passwd -s jenkins daemon 
+  212  passwd -s jenkins root
+  213  passwd  jenkins root
+  214  passwd  jenkins
+  215   docker login localhost:8080
+  216  vi http://localhost:8080/v2
+  217  cat  http://localhost:8080/v2
+  218  systemctl start docker
+  219  docker --version
+  220  docker-machine --version
+  221  docker -machine --version
+  222  docker login --username somesha --password Somesh@1234
+  223  docker login 
+  224  git --V
+  225  git - version
+  226  git  --version
+  227  chmod 656 /var/run/docker.sock
+  228  history
+  229  ls
+  230  pwd
+  231  vi my_password.txt
+  232  cat  my_password.txt
+  233  ll
+  234  history 

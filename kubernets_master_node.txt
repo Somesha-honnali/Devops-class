@@ -1,0 +1,94 @@
+hostanme -i
+      hostname -i
+      hostnamectl set-hostname master
+      vi /etc/hosts
+      setenforce 0
+
+    1   sed -i --follow-symlinks 's/SELINUX=enforcing/SELINUX=disabled/g' /etc/sysconfig/selinux
+    2  reboot
+    3  clear
+    4  systemctl stop firewalld
+    5  systemctl disable firewalld
+    6   sudo yum update -y
+    7   sudo amazon-linux-extras install docker -y
+    8   systemctl enable docker
+    9   systemctl daemon-reload && systemctl restart docker 
+   10   sudo usermod -a -G docker ec2-user
+   11   docker info
+   12   swapoff -a
+   13  echo '1' > /proc/sys/net/bridge/bridge-nf-call-iptables
+   14  modprobe br_netfilter
+   15  modprobe nf_nat
+   16  modprobe xt_REDIRECT
+   17  modprobe xt_owner
+   18  modprobe iptable_nat
+   19  modprobe iptable_mangle
+   20  modprobe iptable_filter
+   21  cat <<EOF > /etc/yum.repos.d/kubernetes.repo
+   22  [kubernetes]
+   23  name=Kubernetes
+   24  baseurl=https://packages.cloud.google.com/yum/repos/kubernetes-el7-x86_64
+   25  enabled=1
+   26  gpgcheck=1
+   27  repo_gpgcheck=1
+   28  gpgkey=https://packages.cloud.google.com/yum/doc/yum-key.gpg https://packages.cloud.google.com/yum/doc/rpm-package-key.gpg
+   29  EOF
+   30  yum install -y kubelet-1.21.2
+   31  yum install -y kubectl-1.21.2
+   32  yum install -y kubeadm-1.21.2
+   33  systemctl daemon-reload 
+   34  systemctl restart kubelet
+   35   
+   36  systemctl  status kubelet
+   37  systemctl enable  kubelet
+   38  yum install -y kubelet-1.21.2
+   39  clear
+   40  mv /etc/yum.repos.d/kubernetes.repo /etc/yum.repos.d/kubernetes.repo.bak
+   41  cat >> /etc/yum.repos.d/kubernetes.repo <<EOF
+   42  [kubernetes]
+   43  name=Kubernetes
+   44  baseurl=https://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64/
+   45  enabled=1
+   46  gpgcheck=0
+   47  EOF
+   48  yum install -y kubelet-1.21.2
+   49  yum install -y kubectl-1.21.2
+   50  yum install -y kubeadm-1.21.2
+   51  systemctl daemon-reload 
+   52  systemctl restart kubelet
+   53   
+   54  systemctl  status kubelet
+   55  systemctl enable  kubelet
+   56  swapoff -a
+   57  claer
+   58  clear
+   59  hostnamectl hostname MASTER_MOD
+   60  hostnamectl set-hostname MASTER_MOD
+   61  HOSTNAME=MASTER_MOD
+   62  reboot
+   63   kubeadm init --control-plane-endpoint "192.168.10.30:6443" --upload-certs --pod-network-cidr=10.244.0.0/16
+   64  clear
+   65  kubeadm init --control-plane-endpoint "192.168.10.30:6443" --upload-certs --pod-network-cidr=10.244.0.0/16
+   66  clear
+   67   kubeadm init --control-plane-endpoint "192.168.10.30:6443" --upload-certs --pod-network-cidr=10.244.0.0/16
+   68  ip -r
+   69  ip-r
+   70  ip -r
+   71  ip r
+   72   kubeadm init --control-plane-endpoint "192.168.10.30:6443" --upload-certs --pod-network-cidr=192.168.10.0/26
+   73  clear
+   74   kubeadm init --control-plane-endpoint "192.168.10.30:6443" --upload-certs --pod-network-cidr
+   75  ip r
+   76   kubeadm init --control-plane-endpoint "192.168.10.30:6443" --upload-certs --pod-network-cidr=192.168.1.0/24
+   77  clear
+   78  hostnamectl set-hostname master
+   79  HOSTNAME=master
+   80  reboot
+   81  clear
+   82   kubeadm init --control-plane-endpoint "192.168.10.30:6443" --upload-certs --pod-network-cidr=10.244.0.0/16
+   83  mkdir -p $HOME/.kube
+   84    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+   85    sudo chown $(id -u):$(id -g) $HOME/.kube/config
+   86  Flanel
+   87  kubectl apply -f https://raw.githubusercontent.com/flannel-io/flannel/master/Documentation/kube-flannel.yml
+   88  kubelet info
